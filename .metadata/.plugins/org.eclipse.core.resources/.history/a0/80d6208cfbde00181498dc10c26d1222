@@ -1,0 +1,376 @@
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusListener;
+
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+
+import java.awt.Font;
+import java.awt.Color;
+
+import javax.swing.JSeparator;
+import javax.swing.ImageIcon;
+import javax.swing.JLayeredPane;
+
+import java.awt.CardLayout;
+
+import javax.swing.JPanel;
+import javax.swing.JComboBox;
+import javax.swing.JButton;
+import javax.swing.JTable;
+
+import net.proteanit.sql.DbUtils;
+
+import java.sql.*;
+import java.util.ArrayList;
+public class AdminPage extends JFrame implements ActionListener{
+
+	public JFrame frame;
+	private JTable table;
+	private JTable table_1;
+	private JButton ShowResult;
+	JLayeredPane layeredPane;
+	private JPanel panel,panel_1;
+	private JComboBox jcb;
+	Connection con;
+	ResultSet rs,rs1;
+	PreparedStatement ps,ps1;
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					AdminPage window = new AdminPage();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	public AdminPage() {
+		initialize();
+	}
+	
+	public void switchpanel(JPanel panel)
+	{
+		layeredPane.removeAll();
+		layeredPane.add(panel);
+		layeredPane.repaint();
+		layeredPane.revalidate();
+	}
+
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(-5, 0, 1400, 800);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JMenuBar menuBar = new JMenuBar();
+		frame.setJMenuBar(menuBar);
+		
+		JMenu mnStudent = new JMenu("Student");
+		menuBar.add(mnStudent);
+		
+		JMenuItem mntmAddStudent = new JMenuItem("Add Student");
+		mnStudent.add(mntmAddStudent);
+		mntmAddStudent.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ar) {
+				Student window = new Student("insert");
+				window.frame.setVisible(true);
+				frame.hide();
+			}
+		});
+		
+		JMenuItem mntmUpdateStudent = new JMenuItem("Update Student");
+		mnStudent.add(mntmUpdateStudent);
+		mntmUpdateStudent.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ar) {
+				Student window = new Student("update");
+				window.frame.setVisible(true);
+				frame.hide();
+			}
+		});
+		
+		
+		JMenuItem mntmDeleteStudent = new JMenuItem("Delete Student");
+		mnStudent.add(mntmDeleteStudent);
+		mntmDeleteStudent.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ar) {
+				Student window = new Student("delete");
+				window.frame.setVisible(true);
+				frame.hide();
+			}
+		});
+		
+		JMenu mnQuestions = new JMenu("Question's");
+		menuBar.add(mnQuestions);
+		
+		JMenuItem mntmAddQuestion = new JMenuItem("Add Question");
+		mnQuestions.add(mntmAddQuestion);
+		mntmAddQuestion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ar) {
+				Question window = new Question("insert");
+				window.frame.setVisible(true);
+				frame.hide();
+			}
+		});
+		
+		JMenuItem mntmUpdateQuestion = new JMenuItem("Update Question");
+		mnQuestions.add(mntmUpdateQuestion);
+		mntmUpdateQuestion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ar) {
+				Question window = new Question("update");
+				window.frame.setVisible(true);
+				frame.hide();
+			}
+		});
+		
+		JMenuItem mntmDeleteQuestion = new JMenuItem("Delete Question");
+		mnQuestions.add(mntmDeleteQuestion);
+		mntmDeleteQuestion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ar) {
+				Question window = new Question("delete");
+				window.frame.setVisible(true);
+				frame.hide();
+			}
+		});
+		
+		JMenu mnRsult = new JMenu("Result");
+		menuBar.add(mnRsult);
+		
+		JMenu mnShow = new JMenu("Show");
+		mnRsult.add(mnShow);
+		mnShow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
+		
+		JMenuItem mntmSingleStudent = new JMenuItem("Single Student");
+		mnShow.add(mntmSingleStudent);
+		mntmSingleStudent.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				switchpanel(panel);
+			}
+		});
+		
+		
+		JMenuItem mntmAllStudent = new JMenuItem("All Student");
+		mnShow.add(mntmAllStudent);
+		mntmAllStudent.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				switchpanel(panel_1);
+			}
+		});
+		
+		JMenuItem mntmUpdateResult = new JMenuItem("Update Result");
+		mnRsult.add(mntmUpdateResult);
+		
+		JMenuItem mntmDeleteResult = new JMenuItem("Delete Result");
+		mnRsult.add(mntmDeleteResult);
+		
+		JMenu mnTopic = new JMenu("Topic");
+		menuBar.add(mnTopic);
+		
+		JMenuItem mntmAddTopic = new JMenuItem("Add Topic");
+		mnTopic.add(mntmAddTopic);
+		mntmAddTopic.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ar) {
+				topic window = new topic("insert");
+				window.frame.setVisible(true);
+				frame.hide();
+			}
+		});
+		
+		JMenuItem mntmUpdateTopic = new JMenuItem("Update Topic");
+		mnTopic.add(mntmUpdateTopic);
+		mntmUpdateTopic.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ar) {
+				topic window = new topic("update");
+				window.frame.setVisible(true);
+				frame.hide();
+			}
+		});
+		
+		JMenuItem mntmDeleteTopic = new JMenuItem("Delete Topic");
+		mnTopic.add(mntmDeleteTopic);
+		mntmDeleteTopic.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ar) {
+				topic window = new topic("delete");
+				window.frame.setVisible(true);
+				frame.hide();
+			}
+		});
+		
+		JMenu mnProfile = new JMenu("Profile");
+		menuBar.add(mnProfile);
+		
+		JMenuItem mntmAddAdmin = new JMenuItem("Add Admin");
+		mnProfile.add(mntmAddAdmin);
+		mntmAddAdmin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ar) {
+				Admin window = new Admin("insert");
+				window.frame.setVisible(true);
+				frame.hide();
+			}
+		});
+		
+		JMenuItem mntmUpdateAdmin = new JMenuItem("Update Admin");
+		mnProfile.add(mntmUpdateAdmin);
+		mntmUpdateAdmin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ar) {
+				Admin window = new Admin("update");
+				window.frame.setVisible(true);
+				frame.hide();
+			}
+		});
+		
+		JMenuItem mntmDeleteAdmin = new JMenuItem("Delete Admin");
+		mnProfile.add(mntmDeleteAdmin);
+		mntmDeleteAdmin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent ar) {
+				Admin window = new Admin("delete");
+				window.frame.setVisible(true);
+				frame.hide();
+			}
+		});
+		
+		JMenu mnReport = new JMenu("Report");
+		menuBar.add(mnReport);
+		
+		JMenuItem mntmStudentReport = new JMenuItem("Student Report");
+		mnReport.add(mntmStudentReport);
+		
+		JMenuItem mntmResultReport = new JMenuItem("Result Report");
+		mnReport.add(mntmResultReport);
+		
+		JMenu mnHelp = new JMenu("About");
+		menuBar.add(mnHelp);
+		
+		JMenuItem mntmHelp = new JMenuItem("Help");
+		mnHelp.add(mntmHelp);
+		frame.getContentPane().setLayout(null);
+		
+		JLabel lblExaminationManagementSystem = new JLabel("Examination Management System");
+		lblExaminationManagementSystem.setForeground(Color.MAGENTA);
+		lblExaminationManagementSystem.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 35));
+		lblExaminationManagementSystem.setBounds(389, 30, 627, 48);
+		frame.getContentPane().add(lblExaminationManagementSystem);
+		
+		JSeparator separator = new JSeparator();
+		separator.setForeground(Color.RED);
+		separator.setBounds(367, 87, 649, 9);
+		frame.getContentPane().add(separator);
+		
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setIcon(new ImageIcon(AdminPage.class.getResource("/images/EXAM.jpg")));
+		lblNewLabel.setBounds(0, 0, 351, 128);
+		frame.getContentPane().add(lblNewLabel);
+		
+		layeredPane = new JLayeredPane();
+		layeredPane.setBounds(21, 171, 1316, 522);
+		frame.getContentPane().add(layeredPane);
+		layeredPane.setLayout(new CardLayout(0, 0));
+		
+		JButton btnLogout = new JButton("LOGOUT");
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				MainPage window = new MainPage();
+				window.frame.setVisible(true);
+				frame.hide();
+			}
+		});
+		btnLogout.setBackground(Color.ORANGE);
+		btnLogout.setFont(new Font("Tahoma", Font.BOLD, 20));
+		btnLogout.setBounds(1197, 11, 140, 33);
+		frame.getContentPane().add(btnLogout);
+		
+		JLabel lblNewLabel_1 = new JLabel("New label");
+		lblNewLabel_1.setIcon(new ImageIcon(AdminPage.class.getResource("/images/Success-Wallpaper-hd.jpg")));
+		lblNewLabel_1.setBounds(0, 0, 1390, 741);
+		frame.getContentPane().add(lblNewLabel_1);
+		
+		panel = new JPanel();
+		panel.setBackground(Color.GRAY);
+		panel.setLayout(null);
+		
+		JLabel lblStudentId = new JLabel("Student ID :");
+		lblStudentId.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblStudentId.setBounds(49, 44, 153, 33);
+		panel.add(lblStudentId);
+		
+		
+		jcb = new JComboBox();
+		jcb.setBounds(254, 44, 206, 33);
+		panel.add(jcb);
+		
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+			con=DriverManager.getConnection("jdbc:mysql://localhost:3306/quiz","root","root");
+			String stl="select studentid from student";
+			ps=con.prepareStatement(stl);
+			rs=ps.executeQuery();
+			while(rs.next()){
+				jcb.addItem(rs.getString(1));
+			}
+		}
+		catch(Exception e){
+			JOptionPane.showMessageDialog(frame, e.toString());
+		}
+		
+		ShowResult = new JButton("Show Result");
+		ShowResult.setBackground(Color.ORANGE);
+		ShowResult.setFont(new Font("Tahoma", Font.BOLD, 15));
+		ShowResult.setBounds(537, 48, 153, 32);
+		ShowResult.addActionListener(this);
+		panel.add(ShowResult);
+		
+		
+		panel_1 = new JPanel();
+		panel_1.setBackground(Color.GRAY);
+		panel_1.setLayout(null);
+		
+		table = new JTable();
+		table.setBounds(49, 50, 1208, 388);
+		panel_1.add(table);
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+			con=DriverManager.getConnection("jdbc:mysql://localhost:3306/quiz","root","root");
+			String str="select * from result";
+			ps1=con.prepareStatement(str);
+			rs=ps1.executeQuery();
+			table.setModel(DbUtils.resultSetToTableModel(rs));
+		}
+		catch(Exception e){
+			JOptionPane.showMessageDialog(frame, e.toString());
+		}
+		
+		table_1 = new JTable();
+		table_1.setBounds(60, 100, 1171, 400);
+		panel.add(table_1);
+	}
+	private JScrollPane jp;
+	private JTable jt;
+	public void actionPerformed(ActionEvent a) {
+		if(a.getSource()==ShowResult){
+			try{
+				String str="select * from result where studentid=?";
+				ps1=con.prepareStatement(str);
+				ps1.setString(1, jcb.getSelectedItem().toString());
+				rs=ps1.executeQuery();
+				table_1.setModel(DbUtils.resultSetToTableModel(rs));
+			}
+			catch(Exception e){
+				JOptionPane.showMessageDialog(frame, e.toString());
+			}
+		}
+		
+	}
+}

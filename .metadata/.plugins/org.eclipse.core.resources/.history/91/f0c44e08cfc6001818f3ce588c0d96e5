@@ -1,0 +1,87 @@
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FlowLayout;
+import javax.swing.JTextField;
+import javax.swing.JPasswordField;
+import javax.swing.JButton;
+import javax.swing.JMenuBar;
+import java.awt.Panel;
+import javax.swing.UIManager;
+
+
+public class MainPage {
+
+	private JFrame frame;
+	private JTextField textField;
+	private JPasswordField passwordField;
+
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MainPage window = new MainPage();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	public MainPage() {
+		initialize();
+	}
+
+	private void initialize() {
+		frame = new JFrame();
+		frame.getContentPane().setBackground(Color.LIGHT_GRAY);
+		frame.setBounds(100, 100, 541, 394);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Login Panel");
+		lblNewLabel.setBounds(176, 45, 187, 31);
+		lblNewLabel.setFont(new Font("Algerian", Font.ITALIC, 30));
+		lblNewLabel.setForeground(Color.MAGENTA);
+		frame.getContentPane().add(lblNewLabel);
+		
+		JLabel lblName = new JLabel("Name :");
+		lblName.setFont(new Font("Tahoma", Font.BOLD, 19));
+		lblName.setBounds(79, 95, 76, 31);
+		frame.getContentPane().add(lblName);
+		
+		JLabel lblPassword = new JLabel("Password :");
+		lblPassword.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblPassword.setBounds(59, 148, 124, 31);
+		frame.getContentPane().add(lblPassword);
+		
+		textField = new JTextField();
+		textField.setBounds(228, 99, 200, 31);
+		frame.getContentPane().add(textField);
+		textField.setColumns(10);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(228, 150, 200, 34);
+		frame.getContentPane().add(passwordField);
+		
+		JButton btnLogin = new JButton("LogIn");
+		btnLogin.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnLogin.setBounds(92, 219, 115, 34);
+		frame.getContentPane().add(btnLogin);
+		
+		JButton btnCancel = new JButton("Cancel");
+		btnCancel.setFont(new Font("Tahoma", Font.BOLD, 16));
+		btnCancel.setBounds(279, 219, 102, 34);
+		frame.getContentPane().add(btnCancel);
+		
+		JButton btnSignup = new JButton("SignUp");
+		btnSignup.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnSignup.setBounds(186, 284, 137, 39);
+		frame.getContentPane().add(btnSignup);
+	}
+}

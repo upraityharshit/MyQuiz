@@ -1,0 +1,316 @@
+import javax.swing.*;
+import java.sql.*;
+import java.awt.*;
+import java.awt.event.*;
+public class Item extends JFrame implements ActionListener,FocusListener
+{
+	JLabel jl1,jl2,jl3,jl4,jl5,jl6,jl7,jl8,tile,msg;
+	JTextField jtf1,jtf2,jtf4,jtf6,jtf8;
+	JComboBox jcb,jtf3,jtf5;
+	JButton b1,b2,back;
+	Font f;
+	Connection con;
+	PreparedStatement st;
+	ResultSet rs;
+	String operation; 
+	Item(String arg)
+	{
+		operation=arg;
+		setLayout(null);
+		tile=new JLabel("Item Entry");
+		tile.setBounds(200,20,400,50);
+		tile.setForeground(Color.BLUE);
+		tile.setFont(new Font("Algerian",Font.BOLD|Font.ITALIC,30));
+		add(tile);
+		f=new Font("Arial",Font.BOLD|Font.ITALIC,20);
+		getContentPane().setBackground(Color.YELLOW);
+		jl1=new JLabel("Item ID");
+		jl1.setBounds(150,100,200,50);
+		jl1.setFont(f);
+		add(jl1);
+		
+		msg=new JLabel("");///
+		msg.setBounds(550,100,450,50);///
+		msg.setForeground(Color.RED);
+		msg.setFont(f);///
+		add(msg);///
+		if(operation=="insert"){
+			jtf1=new JTextField();
+			jtf1.setBounds(360,110,150,40);
+			jtf1.addFocusListener(this); //////////
+			add(jtf1);
+		}
+		else{
+			jcb=new JComboBox();
+			jcb.setBounds(360,160,150,40);
+			add(jcb);
+		}
+		
+		jl2=new JLabel("Item Name");
+		jl2.setBounds(150,150,200,50);
+		jl2.setFont(f);
+		add(jl2);
+		jtf2=new JTextField();
+		jtf2.setBounds(360,160,150,40);
+		jtf2.addFocusListener(this);
+		add(jtf2);	
+		
+		jl3=new JLabel("Item Category ID");
+		jl3.setBounds(150,200,200,50);
+		jl3.setFont(f);
+		add(jl3);
+		jtf3=new JComboBox();
+		jtf3.setBounds(360,210,150,40);
+		jtf3.addFocusListener(this);
+		add(jtf3);
+		jl4=new JLabel("Price");
+		jl4.setBounds(150,250,200,50);
+		jl4.setFont(f);
+		add(jl4);
+		jtf4=new JTextField();
+		jtf4.setBounds(360,260,150,40);
+		jtf4.addFocusListener(this);
+		add(jtf4);
+		jl5=new JLabel("Company ID");
+		jl5.setBounds(150,300,200,50);
+		jl5.setFont(f);
+		add(jl5);
+		jtf5=new JComboBox();
+		jtf5.setBounds(360,310,150,40);
+		jtf5.addFocusListener(this);
+		add(jtf5);
+		jl6=new JLabel("Quantity");
+		jl6.setBounds(150,350,200,50);
+		jl6.setFont(f);
+		add(jl6);
+		jtf6=new JTextField();
+		jtf6.setBounds(360,360,150,40);
+		jtf6.addFocusListener(this);
+		add(jtf6);
+		jl8=new JLabel("Remarks");
+		jl8.setBounds(150,400,200,50);
+		jl8.setFont(f);
+		add(jl8);
+		jtf8=new JTextField();
+		jtf8.setBounds(360,410,200,50);
+		jtf8.addFocusListener(this);
+		add(jtf8);
+		if(arg=="insert")
+			b1=new JButton("Save");
+		if(arg=="delete")
+			b1=new JButton("Delete");
+		if(arg=="update")
+			b1=new JButton("Update");
+		b1.setBounds(200,530,100,40);
+		add(b1);
+		b1.setEnabled(false);////
+		b1.addActionListener(this);
+		b2=new JButton("Cancel");
+		b2.setBounds(400,530,100,40);
+		add(b2);
+		b2.addActionListener(this);
+		back=new JButton("Back");
+		back.setBounds(300,600,100,40);
+		add(back);
+		back.addActionListener(this);
+		
+		fillid();
+		setSize(1400,750);
+		setVisible(true);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+	public static void main(String[] arg) 
+	{
+		new Item("insert");
+	}
+	public void actionPerformed(ActionEvent ar) 
+	{
+		if(ar.getSource()==b1)
+		{
+				try
+				{
+					Class.forName("com.mysql.jdbc.Driver");
+					con=DriverManager.getConnection("jdbc:mysql://localhost:3306/stock","root","root");
+					if(operation=="insert")
+					{
+						if(jtf1.getText().length()==0||jtf2.getText().length()==0||jtf4.getText().length()==0||jtf6.getText().length()==0||jtf8.getText().length()==0)
+						{
+							b1.setEnabled(false);
+							JOptionPane.showMessageDialog(this, "Please Enter all Fields..");
+						}
+						else
+						{ 
+							
+							String itemid=jtf1.getText();
+							String name=jtf2.getText();
+							String itemcatid=jtf3.getSelectedItem().toString();
+							int price=Integer.parseInt(jtf4.getText());
+							String comp=jtf5.getSelectedItem().toString();	
+							int qty=Integer.parseInt(jtf6.getText());
+							String Remarks=jtf8.getText();
+						String str="insert into item values(?,?,?,?,?,?,?)";
+						st=con.prepareStatement(str);
+						st.setString(1,itemid);
+						st.setString(2,name);
+						st.setString(3,itemcatid);
+						st.setString(4,comp);
+						st.setInt(5,price);
+						st.setInt(6,qty);
+						st.setString(7,Remarks);
+						int q=st.executeUpdate();
+						JOptionPane.showMessageDialog(this, "Data Saved...");
+						}
+					}
+					else if(operation=="delete")
+					{
+						String itemid=jcb.getSelectedItem().toString();
+						String str="delete from item where ItemId=?";
+						st=con.prepareStatement(str);
+						st.setString(1,itemid);
+						int q=st.executeUpdate();
+						JOptionPane.showMessageDialog(this, "Data Deleted...");
+					}
+					else if(operation=="update")
+					{
+						if(jtf2.getText().length()==0||jtf4.getText().length()==0||jtf6.getText().length()==0||jtf8.getText().length()==0)
+						{
+							b1.setEnabled(false);
+							JOptionPane.showMessageDialog(this, "Please Enter all Fields..");
+						}
+						else
+						{
+							String itemid=jcb.getSelectedItem().toString();
+							String name=jtf2.getText();
+							String itemcatid=jtf3.getSelectedItem().toString();
+							int price=Integer.parseInt(jtf4.getText());
+							String comp=jtf5.getSelectedItem().toString();	
+							int qty=Integer.parseInt(jtf6.getText());
+							String Remarks=jtf8.getText();
+						String str="update item set ItemId=?,Iname=?,ItemCatId=?,price=?,companyid=?,Quantity=?,Remarks=? where ItemId=?";
+						st=con.prepareStatement(str);
+						st.setString(1,itemid);
+						st.setString(2,name);
+						st.setString(3,itemcatid);
+						st.setInt(5,price);
+						st.setString(4,comp);
+						st.setInt(6,qty);
+						st.setString(7,Remarks);
+						st.setString(8,itemid);
+						int q=st.executeUpdate();
+						JOptionPane.showMessageDialog(this, "Data Update...");
+						}
+					}
+					con.close();
+					jtf2.setText("");
+					jtf4.setText("");
+					jtf6.setText("");
+					jtf8.setText("");
+				}
+				catch(Exception e){
+					JOptionPane.showMessageDialog(this, "Error.."+e.toString());
+				}
+		}
+		else if(ar.getSource()==b2)
+		{
+			System.exit(1);
+		}
+		else if(ar.getSource()==back)
+		{
+			adminpage window = new adminpage("hello");
+			window.frame.setVisible(true);
+			hide();
+		}
+	}
+	public boolean getUserID(String Id)
+	{
+		ResultSet rs;
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driver");
+			con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mobileshop","root","root");
+			String str="select * from item where ItemId=?";
+			st=con.prepareStatement(str);
+			st.setString(1, Id);
+			rs=st.executeQuery();
+			if(rs.next())
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		catch(Exception e)
+		{
+			return true;
+		}
+	}
+	public void focusGained(FocusEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void focusLost(FocusEvent arg0) {
+		if(operation=="insert")
+		{
+			boolean ret=getUserID(jtf1.getText());
+			if (ret==true||jtf1.getText().length()==0)
+			{
+				if(jtf1.getText().length()==0)
+					msg.setText("Empty Field...");
+				else
+					msg.setText("Try another ID...");
+				b1.setEnabled(false);
+			}
+			else
+			{
+				msg.setText("");
+				b1.setEnabled(true);
+			}
+		}
+		else 
+			b1.setEnabled(true);
+	}
+	public void fillid()
+	{
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driver");
+			con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mobileshop","root","root");
+			String str="select ItemCatID from itemcategory";
+			st=con.prepareStatement(str);
+			rs=st.executeQuery();
+			while(rs.next())
+			{
+				jtf3.addItem(rs.getString(1).toString());
+			}
+		}
+		catch(Exception e) {}
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driver");
+			con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mobileshop","root","root");
+			String str="select CompanyId from company";
+			st=con.prepareStatement(str);
+			rs=st.executeQuery();
+			while(rs.next())
+			{
+				jtf5.addItem(rs.getString(1).toString());
+			}
+		}
+		catch(Exception e) {}
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driver");
+			con=DriverManager.getConnection("jdbc:mysql://localhost:3306/mobileshop","root","root");
+			String str="select itemid from item";
+			st=con.prepareStatement(str);
+			rs=st.executeQuery();
+			while(rs.next())
+			{
+				jcb.addItem(rs.getString(1).toString());
+			}
+		}
+		catch(Exception e) {}
+	}
+}

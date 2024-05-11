@@ -1,0 +1,243 @@
+import java.awt.EventQueue;
+
+import javax.swing.*;
+
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JLabel;
+
+import java.awt.BorderLayout;
+
+import javax.swing.ImageIcon;
+
+import java.awt.Color;
+
+import javax.swing.SwingConstants;
+
+import java.awt.Font;
+
+import javax.swing.JPanel;
+import javax.swing.JLayeredPane;
+
+import java.awt.CardLayout;
+
+
+public class adminpage implements ActionListener {
+
+	JFrame frame;
+	private JLayeredPane layeredPane;
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					adminpage window = new adminpage("hello");
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	public adminpage(String name) {
+		initialize();
+	}
+
+	public void switchpanel(JPanel panel)
+	{
+		layeredPane.removeAll();
+		layeredPane.add(panel);
+		layeredPane.repaint();
+		layeredPane.revalidate();
+	}
+	
+	
+	private void initialize() {
+		frame = new JFrame();
+		frame.getContentPane().setBackground(Color.GRAY);
+		frame.setBounds(1, 1, 1400, 750);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JMenuBar menuBar = new JMenuBar();
+		frame.setJMenuBar(menuBar);
+		
+		JMenu mnNewMenu = new JMenu("Sell");
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmNewMenuItem = new JMenuItem("Sell from stock");
+		mnNewMenu.add(mntmNewMenuItem);
+		
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Direct Sell");
+		mnNewMenu.add(mntmNewMenuItem_2);
+		
+		JMenuItem mntmDuplicateBill = new JMenuItem("Duplicate Bill");
+		mnNewMenu.add(mntmDuplicateBill);
+		
+		JMenu mnStock = new JMenu("Stock");
+		menuBar.add(mnStock);
+		
+		JMenuItem mntmCheckStock = new JMenuItem("Mobile");
+		mnStock.add(mntmCheckStock);
+		
+		JMenuItem mntmTelevision = new JMenuItem("Television");
+		mnStock.add(mntmTelevision);
+		
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("All ");
+		mnStock.add(mntmNewMenuItem_1);
+		
+		JMenu mnNewMenu_1 = new JMenu("Purchase");
+		menuBar.add(mnNewMenu_1);
+		
+		JMenu mnAdd = new JMenu("Add");
+		mnNewMenu_1.add(mnAdd);
+		
+		JMenuItem mntmAddItem = new JMenuItem("Add Item");
+		mnAdd.add(mntmAddItem);
+		mntmAddItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				if(a.getSource()==mntmAddItem){
+					new Item("insert");
+					frame.hide();
+				}			
+			}
+		});
+		
+		JMenuItem mntmAddItemCategory = new JMenuItem("Add Item Category");
+		mnAdd.add(mntmAddItemCategory);
+		mntmAddItemCategory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				if(a.getSource()==mntmAddItemCategory){
+					new ItemCategory("insert");
+					frame.hide();
+				}			
+			}
+		});
+		
+		JMenuItem mntmAddSupplier = new JMenuItem("Add Supplier");
+		mnAdd.add(mntmAddSupplier);
+		
+		JMenuItem mntmAddCompany = new JMenuItem("Add Company");
+		mnAdd.add(mntmAddCompany);
+		
+		JMenu mnUpdate = new JMenu("Update");
+		mnNewMenu_1.add(mnUpdate);
+		
+		JMenuItem mntmUpdateItem = new JMenuItem("Update Item");
+		mnUpdate.add(mntmUpdateItem);
+		
+		JMenuItem mntmUpdateItemCategory = new JMenuItem("Update Item Category");
+		mnUpdate.add(mntmUpdateItemCategory);
+		mntmUpdateItemCategory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				if(a.getSource()==mntmUpdateItemCategory){
+					new ItemCategory("update");
+					frame.hide();
+				}			
+			}
+		});
+		
+		JMenuItem mntmUpdateSupplier = new JMenuItem("Update Supplier");
+		mnUpdate.add(mntmUpdateSupplier);
+		
+		JMenuItem mntmUpdateCompany = new JMenuItem("Update Company");
+		mnUpdate.add(mntmUpdateCompany);
+		
+		JMenu mnDelete = new JMenu("Delete");
+		mnNewMenu_1.add(mnDelete);
+		
+		JMenuItem mntmDeleteItem = new JMenuItem("Delete Item");
+		mnDelete.add(mntmDeleteItem);
+		
+		JMenuItem mntmDeleteItemCategory = new JMenuItem("Delete Item Category");
+		mnDelete.add(mntmDeleteItemCategory);
+		mntmDeleteItemCategory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				if(a.getSource()==mntmDeleteItemCategory){
+					new ItemCategory("delete");
+					frame.hide();
+				}			
+			}
+		});
+		
+		JMenuItem mntmDeleteSupplier = new JMenuItem("Delete Supplier");
+		mnDelete.add(mntmDeleteSupplier);
+		
+		JMenuItem mntmDeleteCompany = new JMenuItem("Delete Company");
+		mnDelete.add(mntmDeleteCompany);
+		
+		JMenu mnNewMenu_2 = new JMenu("Customer");
+		menuBar.add(mnNewMenu_2);
+		
+		JMenuItem mntmSearchCustomer = new JMenuItem("Search Customer");
+		mnNewMenu_2.add(mntmSearchCustomer);
+		
+		JMenu mnUser = new JMenu("User");
+		menuBar.add(mnUser);
+		
+		JMenuItem mntmChangePassword = new JMenuItem("Change Password");
+		mnUser.add(mntmChangePassword);
+		
+		JMenu mnNewMenu_3 = new JMenu("Aboutus");
+		menuBar.add(mnNewMenu_3);
+		frame.getContentPane().setLayout(null);
+		
+		JLabel lblMyShop = new JLabel("My SHOP");
+		lblMyShop.setForeground(new Color(0, 255, 0));
+		lblMyShop.setFont(new Font("Algerian", Font.BOLD | Font.ITALIC, 55));
+		lblMyShop.setBounds(324, 74, 268, 105);
+		frame.getContentPane().add(lblMyShop);
+		
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setIcon(new ImageIcon("E:\\WTWO\\BillPay\\src\\download.jpg"));
+		lblNewLabel.setBounds(0, 0, 310, 179);
+		frame.getContentPane().add(lblNewLabel);
+		
+		/*layeredPane = new JLayeredPane();
+		layeredPane.setBounds(28, 216, 1316, 448);
+		frame.getContentPane().add(layeredPane);
+		layeredPane.setLayout(new CardLayout(0, 0));
+		
+		JPanel panel = new JPanel();
+		layeredPane.add(panel, "panel1");
+		panel.setLayout(null);
+		
+		JPanel panel_1 = new JPanel();
+		layeredPane.add(panel_1, "pane2");
+		
+		JPanel panel_2 = new JPanel();
+		layeredPane.add(panel_2, "panel3");
+		
+		JPanel panel_3 = new JPanel();
+		layeredPane.add(panel_3, "panel4");*/
+		
+		JButton btnLogout = new JButton("LOGOUT");
+		btnLogout.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnLogout.setBounds(1217, 11, 110, 27);
+		frame.getContentPane().add(btnLogout);
+		
+		JLabel lblNewLabel_1 = new JLabel("New label");
+		lblNewLabel_1.setIcon(new ImageIcon("E:\\Harshit\\Photoes\\wallpaper\\Success-Wallpaper-hd.jpg"));
+		lblNewLabel_1.setBounds(0, 0, 1360, 679);
+		frame.getContentPane().add(lblNewLabel_1);
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent a) {
+				if(a.getSource()==btnLogout){
+					MainPage window=new MainPage();
+					window.frame.setVisible(true);
+					frame.hide();
+				}			
+			}
+		});
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+}
